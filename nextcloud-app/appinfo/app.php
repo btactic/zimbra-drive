@@ -25,6 +25,15 @@ use OCA\ZimbraDrive\Service\DisableZimbraDriveHandler;
 use OCP\App\ManagerEvent;
 use OC;
 use OCP\IURLGenerator;
+use OCA\ZimbraDrive\Controller\ZimbraDriveApiController;
+use OCA\ZimbraDrive\Service\LoginService;
+use OCA\ZimbraDrive\Service\StorageService;
+use OCP\Files\IMimeTypeDetector;
+use OCA\ZimbraDrive\Service\SearchService;
+use OCA\ZimbraDrive\Service\Filter\FilterFactoryProvider;
+use OCA\ZimbraDrive\Service\Filter\FilterUtils;
+use OCA\ZimbraDrive\Response\DownloadNodeResponseFactory;
+use OCA\ZimbraDrive\Response\DownloadItemResponseFactory;
 
 
 class App extends \OCP\AppFramework\App
@@ -35,6 +44,31 @@ class App extends \OCP\AppFramework\App
         parent::__construct(self::APP_NAME, $urlParams);
 
         $container = $this->getContainer();
+        $server = $container->getServer();
+        $logger = $container->query('ILogger');
+        $logService = new LogService($logger, self::APP_NAME);
+        $loginService = new LoginService($logService, $server->getUserSession());
+        $storageService = new StorageService($container, $container->query(IMimeTypeDetector::class), $logService, $server->getShareManager());
+        $filterUtils = new FilterUtils();
+        $filterFactoryProvider = new FilterFactoryProvider($filterUtils, $storageService, $logService);
+        $searchService = new SearchService($storageService, $logService, $filterFactoryProvider, $filterUtils);
+        $downloadItemResponseFactory = new DownloadItemResponseFactory($storageService);
+        $downloadNodeResponseFactory = new DownloadNodeResponseFactory($downloadItemResponseFactory);
+
+        /**
+        * Controllers
+        */
+        $container->registerService('ZimbraDriveApiController', function (IContainer $c) use ($server) {
+            return new ZimbraDriveApiController(
+                $c->query('AppName'),
+                $c->query('Request'),
+                $loginService,
+                $storageService,
+                $searchService,
+                $downloadNodeResponseFactory,
+                $logService
+            );
+        });
 
         $container->registerService('IUserSession', function($c) {
             return $c->query('ServerContainer')->getUserSession();
