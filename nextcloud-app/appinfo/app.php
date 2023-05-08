@@ -44,31 +44,6 @@ class App extends \OCP\AppFramework\App
         parent::__construct(self::APP_NAME, $urlParams);
 
         $container = $this->getContainer();
-        $server = $container->getServer();
-        $logger = $container->query('ILogger');
-        $logService = new LogService($logger, self::APP_NAME);
-        $loginService = new LoginService($logService, $server->getUserSession());
-        $storageService = new StorageService($container, $container->query(IMimeTypeDetector::class), $logService, $server->getShareManager());
-        $filterUtils = new FilterUtils();
-        $filterFactoryProvider = new FilterFactoryProvider($filterUtils, $storageService, $logService);
-        $searchService = new SearchService($storageService, $logService, $filterFactoryProvider, $filterUtils);
-        $downloadItemResponseFactory = new DownloadItemResponseFactory($storageService);
-        $downloadNodeResponseFactory = new DownloadNodeResponseFactory($downloadItemResponseFactory);
-
-        /**
-        * Controllers
-        */
-        $container->registerService('ZimbraDriveApiController', function (IContainer $c) use ($server) {
-            return new ZimbraDriveApiController(
-                $c->query('AppName'),
-                $c->query('Request'),
-                $loginService,
-                $storageService,
-                $searchService,
-                $downloadNodeResponseFactory,
-                $logService
-            );
-        });
 
         $container->registerService('IUserSession', function($c) {
             return $c->query('ServerContainer')->getUserSession();
@@ -90,6 +65,32 @@ class App extends \OCP\AppFramework\App
 
         $container->registerService('IConfig', function($c) {
             return $c->query('ServerContainer')->getConfig();
+        });
+
+        $server = $container->getServer();
+        $logger = $container->query('ILogger');
+        $logService = $container->query('LogService');
+        $loginService = new LoginService($logService, $server->getUserSession());
+        $storageService = new StorageService($container, $container->query(IMimeTypeDetector::class), $logService, $server->getShareManager());
+        $filterUtils = new FilterUtils();
+        $filterFactoryProvider = new FilterFactoryProvider($filterUtils, $storageService, $logService);
+        $searchService = new SearchService($storageService, $logService, $filterFactoryProvider, $filterUtils);
+        $downloadItemResponseFactory = new DownloadItemResponseFactory($storageService);
+        $downloadNodeResponseFactory = new DownloadNodeResponseFactory($downloadItemResponseFactory);
+
+        /**
+        * Controllers
+        */
+        $container->registerService('ZimbraDriveApiController', function (IContainer $c) use ($server) {
+            return new ZimbraDriveApiController(
+                $c->query('AppName'),
+                $c->query('Request'),
+                $loginService,
+                $storageService,
+                $searchService,
+                $downloadNodeResponseFactory,
+                $logService
+            );
         });
     }
 }
