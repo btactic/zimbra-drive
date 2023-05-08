@@ -70,8 +70,9 @@ class App extends \OCP\AppFramework\App
         $server = $container->getServer();
         $logger = $container->query('ILogger');
         $logService = $container->query('LogService');
+        $iServerContainer = $container->query('IServerContainer');
         $loginService = new LoginService($logService, $server->getUserSession());
-        $storageService = new StorageService($container, $container->query(IMimeTypeDetector::class), $logService, $server->getShareManager());
+        $storageService = new StorageService($iServerContainer, $container->query(IMimeTypeDetector::class), $logService, $server->getShareManager());
         $filterUtils = new FilterUtils();
         $filterFactoryProvider = new FilterFactoryProvider($filterUtils, $storageService, $logService);
         $searchService = new SearchService($storageService, $logService, $filterFactoryProvider, $filterUtils);
