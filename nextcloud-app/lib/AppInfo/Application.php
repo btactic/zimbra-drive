@@ -24,82 +24,86 @@ use OCA\ZimbraDrive\Service\LogService;
 use OCA\ZimbraDrive\Service\DisableZimbraDriveHandler;
 use OCP\App\ManagerEvent;
 use OC;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IURLGenerator;
+use OCP\L10N\IFactory;
+use OCP\Server;
 
+use OCP\AppFramework\App;
+use OCP\AppFramework\Bootstrap\IBootContext;
+use OCP\AppFramework\Bootstrap\IBootstrap;
+use OCP\AppFramework\Bootstrap\IRegistrationContext;
 
-class App extends \OCP\AppFramework\App
+class Application extends App implements IBootstrap
 {
     const APP_ID = 'zimbradrive';
 
-    public function __construct(array $urlParams=array()){
+    public function __construct(array $urlParams=[]){
         parent::__construct(self::APP_ID, $urlParams);
+    }
 
-        $container = $this->getContainer();
+    public function register(IRegistrationContext $context): void {
 
-        $container->registerService('IUserSession', function($c) {
+        $context->registerService('IUserSession', function($c) {
             return $c->query('ServerContainer')->getUserSession();
         });
 
-        $container->registerService('ILogger', function($c) {
+        $context->registerService('ILogger', function($c) {
             return $c->query('ServerContainer')->getLogger();
         });
 
-        $container->registerService('LogService', function($c) {
+        $context->registerService('LogService', function($c) {
             $logger = $c->query('ILogger');
 
             return new LogService($logger, self::APP_ID);
         });
 
-        $container->registerService('IServerContainer', function($c) {
+        $context->registerService('IServerContainer', function($c) {
             return $c->query('ServerContainer');
         });
 
-        $container->registerService('IConfig', function($c) {
+        $context->registerService('IConfig', function($c) {
             return $c->query('ServerContainer')->getConfig();
         });
     }
+
+    public function boot(IBootContext $context): void {
+        $this->registerNavigation($context);
+
+        $serverContainer = $context->getServerContainer();
+        /** @var IEventDispatcher $eventDispatcher */
+        $eventDispatcher = $serverContainer->get(IEventDispatcher::class);
+
+        $eventDispatcher->addListener(ManagerEvent::EVENT_APP_DISABLE, function (ManagerEvent $event) {
+            DisableZimbraDriveHandler::handle(array ('app' => $event->getAppID()));
+        });
+    }
+
+    private function registerNavigation(IBootContext $context): void {
+        $urlGenerator = $context->getAppContainer()->query('OCP\IURLGenerator');
+        $l = Server::get(IFactory::class)->get(self::APP_ID);
+
+        $context->getAppContainer()->query('OCP\INavigationManager')->add([
+            // the string under which your app will be referenced in *Cloud
+            'id' => Application::APP_ID,
+
+            // sorting weight for the navigation. The higher the number, the higher
+            // will it be listed in the navigation
+            'order' => 10,
+
+            // the route that will be shown on startup
+            'href' => $urlGenerator->linkToRoute('zimbradrive.page.index'),
+
+            // the icon that will be shown in the navigation
+            // this file needs to exist in img/
+            'icon' => $urlGenerator->imagePath(Application::APP_ID, 'app.svg'),
+
+            // the title of your application. This will be used in the
+            // navigation or on the settings page of your app
+            'name' => $l->t('Zimbra'),
+        ]);
+    }
+
 }
 
 OC::$CLASSPATH['OC_User_Zimbra'] = 'zimbradrive/lib/auth/oc_user_zimbra.php';
-
-$app = new App();
-
-if(!interface_exists('OCP\Settings\ISettings'))  // ISettings not supported in OwnCloud 9.1.4
-{
-    \OCP\App::registerAdmin(Application::APP_ID, 'admin');
-}
-
-$container = $app->getContainer();
-
-$container->query('OCP\INavigationManager')->add(function () use ($container) {
-    /** @var IURLGenerator $urlGenerator */
-    $urlGenerator = $container->query('OCP\IURLGenerator');
-    $l10n = $container->query('OCP\IL10N');
-    return [
-        // the string under which your app will be referenced in *Cloud
-        'id' => Application::APP_ID,
-
-        // sorting weight for the navigation. The higher the number, the higher
-        // will it be listed in the navigation
-        'order' => 10,
-
-        // the route that will be shown on startup
-        'href' => $urlGenerator->linkToRoute('zimbradrive.page.index'),
-
-        // the icon that will be shown in the navigation
-        // this file needs to exist in img/
-        'icon' => $urlGenerator->imagePath(Application::APP_ID, 'app.svg'),
-
-        // the title of your application. This will be used in the
-        // navigation or on the settings page of your app
-        'name' => $l10n->t('Zimbra'),
-    ];
-});
-
-$dispatcher = $container->getServer()->getEventDispatcher();
-$listener = function($event) {
-    if ($event instanceof ManagerEvent) {
-        DisableZimbraDriveHandler::handle(array ('app' => $event->getAppID()));
-    }
-};
-$dispatcher->addListener('OCP\App\IAppManager::disableApp', $listener);
