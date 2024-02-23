@@ -103,10 +103,3 @@ class Application extends App implements IBootstrap
 }
 
 OC::$CLASSPATH['OC_User_Zimbra'] = 'zimbradrive/lib/auth/oc_user_zimbra.php';
-
-$app = new App();
-
-if(!interface_exists('OCP\Settings\ISettings'))  // ISettings not supported in OwnCloud 9.1.4
-{
-    \OCP\App::registerAdmin(Application::APP_ID, 'admin');
-}
