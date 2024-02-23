@@ -26,38 +26,42 @@ use OCP\App\ManagerEvent;
 use OC;
 use OCP\IURLGenerator;
 
+use OCP\AppFramework\App;
+use OCP\AppFramework\Bootstrap\IBootstrap;
 
-class App extends \OCP\AppFramework\App
+class Application extends App implements IBootstrap
 {
     const APP_ID = 'zimbradrive';
 
-    public function __construct(array $urlParams=array()){
+    public function __construct(array $urlParams=[]){
         parent::__construct(self::APP_ID, $urlParams);
+    }
 
-        $container = $this->getContainer();
+    public function register(IRegistrationContext $context): void {
 
-        $container->registerService('IUserSession', function($c) {
+        $context->registerService('IUserSession', function($c) {
             return $c->query('ServerContainer')->getUserSession();
         });
 
-        $container->registerService('ILogger', function($c) {
+        $context->registerService('ILogger', function($c) {
             return $c->query('ServerContainer')->getLogger();
         });
 
-        $container->registerService('LogService', function($c) {
+        $context->registerService('LogService', function($c) {
             $logger = $c->query('ILogger');
 
             return new LogService($logger, self::APP_ID);
         });
 
-        $container->registerService('IServerContainer', function($c) {
+        $context->registerService('IServerContainer', function($c) {
             return $c->query('ServerContainer');
         });
 
-        $container->registerService('IConfig', function($c) {
+        $context->registerService('IConfig', function($c) {
             return $c->query('ServerContainer')->getConfig();
         });
     }
+
 }
 
 OC::$CLASSPATH['OC_User_Zimbra'] = 'zimbradrive/lib/auth/oc_user_zimbra.php';
