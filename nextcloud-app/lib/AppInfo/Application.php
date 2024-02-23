@@ -64,6 +64,14 @@ class Application extends App implements IBootstrap
 
     public function boot(IBootContext $context): void {
         $this->registerNavigation($context);
+
+        $serverContainer = $context->getServerContainer();
+        /** @var IEventDispatcher $eventDispatcher */
+        $eventDispatcher = $serverContainer->get(IEventDispatcher::class);
+
+        $eventDispatcher->addListener(ManagerEvent::EVENT_APP_DISABLE, function (ManagerEvent $event) {
+            DisableZimbraDriveHandler::handle(array ('app' => $event->getAppID()));
+        });
     }
 
     private function registerNavigation(IBootContext $context): void {
@@ -102,13 +110,3 @@ if(!interface_exists('OCP\Settings\ISettings'))  // ISettings not supported in O
 {
     \OCP\App::registerAdmin(Application::APP_ID, 'admin');
 }
-
-$container = $app->getContainer();
-
-$dispatcher = $container->getServer()->getEventDispatcher();
-$listener = function($event) {
-    if ($event instanceof ManagerEvent) {
-        DisableZimbraDriveHandler::handle(array ('app' => $event->getAppID()));
-    }
-};
-$dispatcher->addListener('OCP\App\IAppManager::disableApp', $listener);
