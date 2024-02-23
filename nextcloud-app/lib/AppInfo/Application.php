@@ -29,10 +29,10 @@ use OCP\IURLGenerator;
 
 class App extends \OCP\AppFramework\App
 {
-    const APP_NAME = 'zimbradrive';
+    const APP_ID = 'zimbradrive';
 
     public function __construct(array $urlParams=array()){
-        parent::__construct(self::APP_NAME, $urlParams);
+        parent::__construct(self::APP_ID, $urlParams);
 
         $container = $this->getContainer();
 
@@ -47,7 +47,7 @@ class App extends \OCP\AppFramework\App
         $container->registerService('LogService', function($c) {
             $logger = $c->query('ILogger');
 
-            return new LogService($logger, self::APP_NAME);
+            return new LogService($logger, self::APP_ID);
         });
 
         $container->registerService('IServerContainer', function($c) {
@@ -66,7 +66,7 @@ $app = new App();
 
 if(!interface_exists('OCP\Settings\ISettings'))  // ISettings not supported in OwnCloud 9.1.4
 {
-    \OCP\App::registerAdmin(App::APP_NAME, 'admin');
+    \OCP\App::registerAdmin(Application::APP_ID, 'admin');
 }
 
 $container = $app->getContainer();
@@ -77,7 +77,7 @@ $container->query('OCP\INavigationManager')->add(function () use ($container) {
     $l10n = $container->query('OCP\IL10N');
     return [
         // the string under which your app will be referenced in *Cloud
-        'id' => App::APP_NAME,
+        'id' => Application::APP_ID,
 
         // sorting weight for the navigation. The higher the number, the higher
         // will it be listed in the navigation
@@ -88,7 +88,7 @@ $container->query('OCP\INavigationManager')->add(function () use ($container) {
 
         // the icon that will be shown in the navigation
         // this file needs to exist in img/
-        'icon' => $urlGenerator->imagePath(App::APP_NAME, 'app.svg'),
+        'icon' => $urlGenerator->imagePath(Application::APP_ID, 'app.svg'),
 
         // the title of your application. This will be used in the
         // navigation or on the settings page of your app
