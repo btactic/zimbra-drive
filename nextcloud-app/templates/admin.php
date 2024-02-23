@@ -18,11 +18,11 @@
  * If you require any further information, feel free to contact legal@zextras.com.
  */
 
-use OCA\ZimbraDrive\AppInfo\App;
+use OCA\ZimbraDrive\AppInfo\Application;
 use OCA\ZimbraDrive\Settings\AppSettings;
 
-script(App::APP_NAME, 'admin');
-style(App::APP_NAME, 'style');
+script(Application::APP_ID, 'admin');
+style(Application::APP_ID, 'style');
 $urlGenerator = \OC::$server->getURLGenerator();
 $allTestUrl = $urlGenerator->linkToRoute('zimbradrive.test.all');
 $enableZimbraUsersUrl = $urlGenerator->linkToRoute('zimbradrive.admin_api.enableZimbraAuthentication');
