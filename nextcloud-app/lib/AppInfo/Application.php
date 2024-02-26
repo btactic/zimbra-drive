@@ -25,6 +25,8 @@ use OCA\ZimbraDrive\Service\DisableZimbraDriveHandler;
 use OCP\App\ManagerEvent;
 use OC;
 use OCP\IURLGenerator;
+use OCP\L10N\IFactory;
+use OCP\Server;
 
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -77,9 +79,8 @@ class Application extends App implements IBootstrap
     }
 
     private function registerNavigation(IBootContext $context): void {
-        /** @var IL10N $l10n */
-        $l10n = $context->getAppContainer()->query(IL10N::class);
         $urlGenerator = $context->getAppContainer()->query('OCP\IURLGenerator');
+        $l = Server::get(IFactory::class)->get(self::APP_ID);
 
         $context->getAppContainer()->query('OCP\INavigationManager')->add([
             // the string under which your app will be referenced in *Cloud
@@ -98,7 +99,7 @@ class Application extends App implements IBootstrap
 
             // the title of your application. This will be used in the
             // navigation or on the settings page of your app
-            'name' => $l10n->t('Zimbra'),
+            'name' => $l->t('Zimbra'),
         ]);
     }
 
