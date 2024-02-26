@@ -17,7 +17,7 @@ Features:
 - Attach Nextcloud files to email.
 
 Supported Versions:
-- Nextcloud: 24, 25, 26, 27
+- Nextcloud: 24, 25, 26, 27, 28
 
 ## Install
 
