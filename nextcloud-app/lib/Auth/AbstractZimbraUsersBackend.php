@@ -23,6 +23,8 @@ namespace OCA\ZimbraDrive\Auth;
 use OC\Accounts\AccountManager;
 use OCA\ZimbraDrive\Settings\AppSettings;
 use OC\User\User;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IPhoneNumberUtil;
 use OCP\IServerContainer;
 use Psr\Log\LoggerInterface;
 use OCP\Security\VerificationToken\IVerificationToken;
@@ -73,7 +75,7 @@ abstract class AbstractZimbraUsersBackend extends RetroCompatibleBackend
             $this->accountManager = new AccountManager(
                 $server->getDatabaseConnection(),
                 $this->config, // Nextcloud >= 21
-                $server->getEventDispatcher(),
+                $server->get(IEventDispatcher::class),
                 $server->getJobList(), //Nextcloud >= 12.0.1
                 $this->logger, // Nexcloud >= 18.0.0
                 $server->get(IVerificationToken::class),
@@ -81,7 +83,8 @@ abstract class AbstractZimbraUsersBackend extends RetroCompatibleBackend
                 $server->get(Defaults::class),
                 $server->get(IFactory::class),
                 $server->get(IURLGenerator::class),
-                $server->getCrypto()
+                $server->getCrypto(),
+                $server->get(IPhoneNumberUtil::class)
             );
         }
 
