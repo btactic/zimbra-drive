@@ -8,13 +8,13 @@ Anyone is free to download it and to clone the repository to apply any change co
 ---
  
 
-Zimbra and Nextcloud / ownCloud integration.
+Zimbra and Nextcloud integration.
 
 Features:
-- Use Zimbra credentials in Nextcloud / ownCloud.
-- Navigate Nextcloud / ownCloud files inside Zimbra.
-- Manage Nextcloud / ownCloud files inside Zimbra (upload, move, rename, delete).
-- Attach Nextcloud / ownCloud files to email.
+- Use Zimbra credentials in Nextcloud.
+- Navigate Nextcloud files inside Zimbra.
+- Manage Nextcloud files inside Zimbra (upload, move, rename, delete).
+- Attach Nextcloud files to email.
 
 Supported Versions:
 - Nextcloud: 24, 25, 26, 27
@@ -65,9 +65,9 @@ zmzimletctl deploy /tmp/zimbradrive/zimlet/com_zextras_drive_open.zip
 ```
 Enable the zimlet in your class of service.
 
-### 5. Install Nextcloud/ownCloud ZimbraDrive App
-Get the zimbradrive application from https://apps.nextcloud.com/apps/zimbradrive or https://marketplace.owncloud.com/apps/zimbradrive.
-Extract `zimbradrive.tar.gz` in the folder `apps` of Nextcloud/ownCloud.
+### 5. Install Nextcloud ZimbraDrive App
+Get the zimbradrive application from https://apps.nextcloud.com/apps/zimbradrive.
+Extract `zimbradrive.tar.gz` in the folder `apps` of Nextcloud.
 ```bash
 tar -xzvf zimbradrive.tar.gz  --directory=/var/www/html/apps
 ```
@@ -76,14 +76,14 @@ Login in Own/Next Cloud as an administrator, in `App` menu, enable `ZimbraDrive`
 sudo -u www-data php /var/www/html/occ app:enable zimbradrive
 ```
 
-### 6. Configure Nextcloud/ownCloud ZimbraDrive App
-Configure the Zimbra Server into to the `Zimbra Drive` section in the **Admin Configuration** of Your Nextcloud/ownCloud instance.  
+### 6. Configure Nextcloud ZimbraDrive App
+Configure the Zimbra Server into to the `Zimbra Drive` section in the **Admin Configuration** of Your Nextcloud instance.
 
 - Enable `Allow Zimbra's users to log in` and `Enable Zimbra authentication back end`
 - Set Zimbra's host and port
 - Enable `Use SSL` if the Zimbra server required an SSL connection (recommended)
 - Enable `Enable certificate verification` if the Zimbra server provide a valid certificate (recommended)
-- To enable the auto login for the Nextcloud/ownCloud's users whom click on the Zimbra icon in the Nextcloud/ownCloud web GUI, insert the `Domain Preauth Key`
+- To enable the auto login for the Nextcloud's users whom click on the Zimbra icon in the Nextcloud web GUI, insert the `Domain Preauth Key`
 
 Click to `Test page` button to check if there are problems with the server connection.
 
@@ -98,12 +98,12 @@ zmprov getDomain domain.com zimbraPreAuthKey
 ```
 ## Uninstall
 
-### Remove all Zimbra Users from Nextcloud/ownCloud
+### Remove all Zimbra Users from Nextcloud
 
-If the administrator remove the Nextcloud/ownCloud App the Zimbra users will not be visible anymore in the
-Nextcloud/ownCloud administration panel.
+If the administrator remove the Nextcloud App the Zimbra users will not be visible anymore in the
+Nextcloud administration panel.
 
-**Note** To manually disable the authentication through Zimbra remove these lines to the Nextcloud/ownCloud configuration:
+**Note** To manually disable the authentication through Zimbra remove these lines to the Nextcloud configuration:
 ```php
 'user_backends' => array (
  0 => array (
@@ -113,13 +113,13 @@ Nextcloud/ownCloud administration panel.
 ),
 ```
 
-**WARNING:** This process will delete all the Zimbra Users data from Nextcloud / ownCloud and is not reversible.
+**WARNING:** This process will delete all the Zimbra Users data from Nextcloud and is not reversible.
 
-To remove all the Zimbra Users from the Nextcloud / ownCloud installation run this command:
+To remove all the Zimbra Users from the Nextcloud installation run this command:
 ```bash
 cd /var/www/nextcloud # Go to the OCC path
 mysql_pwd='password'  # Set the database password
-occ_db='nextcloud'    # Set the database name for the Nextcloud / ownCloud
+occ_db='nextcloud'    # Set the database name for the Nextcloud
 
 mysql -u root --password="${mysql_pwd}" "${occ_db}" -N -s \
     -e 'SELECT `uid` FROM `oc_zimbradrive_users`' \
