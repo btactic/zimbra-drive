@@ -1,3 +1,50 @@
+Updated Open Drive Nextcloud App releases
+============
+
+Neither Zimbra nor Zextras are releasing compatible versions for ZimbraDrive v1 / Open Drive Nextcloud apps since a long time.
+
+Here you will be able to download recent versions of the Nextcloud app for recent Nextcloud versions.
+
+![Open Drive - Splash](images/btactic-splash.png)
+
+## ZimbraDrive Nextcloud App Downloads
+
+- [Open Drive (Nextcloud app) v0.8.26](https://github.com/btactic/zimbra-drive/releases/tag/app-v0.8.26)
+    - Compatible with:
+        - Nextcloud 24
+        - Nextcloud 25
+        - Nextcloud 26
+
+- [Open Drive (Nextcloud app) v0.8.27](https://github.com/btactic/zimbra-drive/releases/tag/app-v0.8.27)
+    - Compatible with:
+        - Nextcloud 26
+        - Nextcloud 27
+    - Not tested on:
+        - Nextcloud 25
+        - Nextcloud 24
+
+Please check [releases](https://github.com/btactic/zimbra-drive/releases) for the most recent versions.
+
+## How to update
+
+If you want to update your existing ZimbraDrive app in your Nextcloud installation you need to:
+
+- Move current `/var/www/html/apps/zimbradrive` folder out of the way
+- Extract the new version:
+```
+tar -xzvf zimbradrive-0.8.27.tar.gz  --directory=/var/www/html/apps
+```
+
+Make sure to change `/var/www/html` so that it matches your Nextcloud root folder.
+
+## About Zimbra zimlet releases
+
+For now we will not neither be updating or releasing new versions of the ZimbraDrive v1 / Open Drive zimlet for Zimbra Classic interface.
+
+## About
+
+Updated ZimbraDrive app for Nextcloud is being developed by BTACTIC, S.C.C.L. ( [http://www.btactic.com](http://www.btactic.com) )
+
 Open Drive
 ============
 
