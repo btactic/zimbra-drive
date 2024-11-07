@@ -47,7 +47,7 @@ lib/httpclient-4.5.2.jar:
 
 lib/zal.jar:
 	mkdir -p lib
-	wget https://openzal.org/${ZAL_VERSION}/zal-${ZAL_VERSION}-${ZAL_ZIMBRA_VERSION}.jar \
+	wget https://github.com/btactic/openzal/releases/download/v${ZAL_VERSION}-${ZAL_ZIMBRA_VERSION}/zal-${ZAL_VERSION}-${ZAL_ZIMBRA_VERSION}.jar \
 		-O lib/zal.jar
 
 dist/zimbradrive-extension.jar: lib/commons-io-1.4.jar \
