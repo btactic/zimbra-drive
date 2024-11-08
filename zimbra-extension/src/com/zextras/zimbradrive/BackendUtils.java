@@ -73,7 +73,7 @@ public class BackendUtils
   private AuthToken assertAuthToken(HttpServletRequest httpServletRequest) {
     String zmAuthToken = assertZmAuthTokenFromCookies(httpServletRequest);
     try {
-      authProvider = AuthProvider();
+      AuthProvider authProvider = AuthProvider();
       return authProvider.decodeAuthToken(zmAuthToken);
     }
     catch (Exception ex) {
