@@ -73,7 +73,8 @@ public class BackendUtils
   private AuthToken assertAuthToken(HttpServletRequest httpServletRequest) {
     String zmAuthToken = assertZmAuthTokenFromCookies(httpServletRequest);
     try {
-      return AuthProvider.decodeAuthToken(zmAuthToken);
+      authProvider = AuthProvider();
+      return authProvider.decodeAuthToken(zmAuthToken);
     }
     catch (Exception ex) {
       ZimbraLog.extensions.debug("Unable to create authToken", ex);
