@@ -31,7 +31,7 @@ $disableZimbraUsersUrl = $urlGenerator->linkToRoute('zimbradrive.admin_api.disab
 <div class="section" id="zimbradrive">
     <h2>Zimbra Drive</h2>
     <div>
-        <p><?php p($l->t('Version: ') . $l->t(\OC_App::getAppVersion('zimbradrive'))) ?></p>
+        <p><?php p($l->t('Version: ') . $l->t(\OCP\Server::get(\OCP\App\IAppManager::class)->getAppVersion('zimbradrive'))) ?></p>
     </div>
     <div>
         <input type="checkbox" class="checkbox" name="<?php print(AppSettings::ENABLE_ZIMBRA_USERS);?>" id="<?php print(AppSettings::ENABLE_ZIMBRA_USERS);?>"
