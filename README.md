@@ -1,3 +1,73 @@
+# Updated Open Drive releases
+
+Neither Zimbra nor Zextras are releasing compatible versions for ZimbraDrive v1 / Open Drive Nextcloud apps since a long time.
+
+Here you will be able to download recent versions of:
+
+- The Nextcloud app for recent Nextcloud versions.
+- The Extension and zimlet for recent Zimbra versions.
+
+![Open Drive - Splash](images/btactic-splash.png)
+
+## Recent Downloads
+
+- [Open Drive v0.8.29](https://github.com/btactic/zimbra-drive/releases/tag/v0.8.29)
+    - Compatible with:
+        - Nextcloud 28
+        - Nextcloud 29
+    - Compatible with:
+        - ZCS 10.1.x
+
+- [Open Drive (Nextcloud app only) v0.8.26](https://github.com/btactic/zimbra-drive/releases/tag/app-v0.8.26)
+    - Compatible with:
+        - Nextcloud 24
+        - Nextcloud 25
+        - Nextcloud 26
+    - Compatible with:
+        - ZCS 8.8.15
+        - ZCS 9.0.0
+
+- [Open Drive (Nextcloud app only) v0.8.27](https://github.com/btactic/zimbra-drive/releases/tag/app-v0.8.27)
+    - Compatible with:
+        - Nextcloud 26
+        - Nextcloud 27
+    - Compatible with:
+        - ZCS 8.8.15
+        - ZCS 9.0.0
+
+Please check [releases](https://github.com/btactic/zimbra-drive/releases) for the most recent versions.
+
+## How to update (Nextcloud app)
+
+If you want to update your existing ZimbraDrive app in your Nextcloud installation you need to:
+
+- Move current `/var/www/html/apps/zimbradrive` folder out of the way
+- Extract the new version:
+```
+tar -xzvf zimbradrive-0.8.29.tar.gz  --directory=/var/www/html/apps
+```
+
+Make sure to change `/var/www/html` so that it matches your Nextcloud root folder.
+
+## How to update (Extension and zimlet)
+
+Just check:
+
+- [2. Install the Zimbra Extension](#2-install-the-zimbra-extension)
+- [4. Install the ZimbraDrive zimlet](#4-install-the-zimbradrive-zimlet)
+
+from the original instructions below.
+
+## About
+
+Updated ZimbraDrive app for Nextcloud, extension for Zimbra and zimlet for Zimbra are being developed by BTACTIC, S.C.C.L. ( [http://www.btactic.com](http://www.btactic.com) )
+
+---
+
+---
+
+---
+
 Open Drive
 ============
 
