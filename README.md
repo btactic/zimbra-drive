@@ -125,13 +125,13 @@ zmprov md domainExample.com zimbraDriveOwnCloudURL https://cloud.example.com/ind
 ```
 
 ### 4. Install the ZimbraDrive zimlet
-Change owner and group of `/tmp/zimbradrive/zimlet/com_zextras_drive_open.zip`
+Change owner and group of `/tmp/zimbradrive/zimlet/com_btactic_drive_open.zip`
 ```bash
-chown zimbra:zimbra /tmp/zimbradrive/zimlet/com_zextras_drive_open.zip
+chown zimbra:zimbra /tmp/zimbradrive/zimlet/com_btactic_drive_open.zip
 ```
 Deploy the zimlet
 ```bash
-zmzimletctl deploy /tmp/zimbradrive/zimlet/com_zextras_drive_open.zip
+zmzimletctl deploy /tmp/zimbradrive/zimlet/com_btactic_drive_open.zip
 ```
 Enable the zimlet in your class of service.
 
