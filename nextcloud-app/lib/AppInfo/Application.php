@@ -20,11 +20,14 @@
 
 namespace OCA\ZimbraDrive\AppInfo;
 
+use Closure;
 use OCA\ZimbraDrive\Service\LogService;
 use OCA\ZimbraDrive\Service\DisableZimbraDriveHandler;
 use OCP\App\ManagerEvent;
 use OC;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\INavigationManager;
+use OCP\IServerContainer;
 use OCP\IURLGenerator;
 use OCP\L10N\IFactory;
 use OCP\Server;
@@ -68,7 +71,7 @@ class Application extends App implements IBootstrap
     }
 
     public function boot(IBootContext $context): void {
-        $this->registerNavigation($context);
+        $context->injectFn(Closure::fromCallable([$this, 'registerNavigation']));
 
         $serverContainer = $context->getServerContainer();
         /** @var IEventDispatcher $eventDispatcher */
@@ -79,29 +82,34 @@ class Application extends App implements IBootstrap
         });
     }
 
-    private function registerNavigation(IBootContext $context): void {
-        $urlGenerator = $context->getAppContainer()->query('OCP\IURLGenerator');
-        $l = Server::get(IFactory::class)->get(self::APP_ID);
+    /**
+    * Register Navigation Tab
+    *
+    * @param IServerContainer $container
+    */
+    protected function registerNavigation(IServerContainer $container) {
+      try {
+        $container->get(INavigationManager::class)
+              ->add(fn () => $this->zimbraDriveNavigation());
+      } catch (RouteNotFoundException $e) {
+      }
+    }
 
-        $context->getAppContainer()->query('OCP\INavigationManager')->add([
-            // the string under which your app will be referenced in *Cloud
-            'id' => Application::APP_ID,
+    /**
+    * @return array
+    */
+    private function zimbraDriveNavigation(): array {
+      /** @var IURLGenerator $urlGen */
+      $urlGen = OC::$server->get(IURLGenerator::class);
+      $l = Server::get(IFactory::class)->get(self::APP_ID);
 
-            // sorting weight for the navigation. The higher the number, the higher
-            // will it be listed in the navigation
-            'order' => 10,
-
-            // the route that will be shown on startup
-            'href' => $urlGenerator->linkToRoute('zimbradrive.page.index'),
-
-            // the icon that will be shown in the navigation
-            // this file needs to exist in img/
-            'icon' => $urlGenerator->imagePath(Application::APP_ID, 'app.svg'),
-
-            // the title of your application. This will be used in the
-            // navigation or on the settings page of your app
-            'name' => $l->t('Zimbra'),
-        ]);
+      return [
+        'id'    => self::APP_ID,
+        'order' => 10,
+        'href'  => $urlGen->linkToRoute('zimbradrive.page.index'),
+        'icon'  => $urlGen->imagePath(self::APP_ID, 'app.svg'),
+        'name'  => $l->t('Zimbra')
+      ];
     }
 
 }
