@@ -32,6 +32,7 @@ use OCP\Defaults;
 use OCP\L10N\IFactory;
 use OCP\IURLGenerator;
 use OC\Accounts\Account;
+use OCP\Http\Client\IClientService;
 
 abstract class AbstractZimbraUsersBackend extends RetroCompatibleBackend
 {
@@ -84,7 +85,8 @@ abstract class AbstractZimbraUsersBackend extends RetroCompatibleBackend
                 $server->get(IFactory::class),
                 $server->get(IURLGenerator::class),
                 $server->getCrypto(),
-                $server->get(IPhoneNumberUtil::class)
+                $server->get(IPhoneNumberUtil::class),
+                $server->get(IClientService::class)
             );
         }
 
