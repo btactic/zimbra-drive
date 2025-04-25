@@ -84,7 +84,8 @@ abstract class AbstractZimbraUsersBackend extends RetroCompatibleBackend
                 $server->get(IFactory::class),
                 $server->get(IURLGenerator::class),
                 $server->getCrypto(),
-                $server->get(IPhoneNumberUtil::class)
+                $server->get(IPhoneNumberUtil::class),
+                $server->get(IClientService::class)
             );
         }
 
