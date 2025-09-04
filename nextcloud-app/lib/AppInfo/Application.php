@@ -37,6 +37,8 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 
+use Psr\Log\LoggerInterface;
+
 class Application extends App implements IBootstrap
 {
     const APP_ID = 'zimbradrive';
@@ -51,12 +53,8 @@ class Application extends App implements IBootstrap
             return $c->query('ServerContainer')->getUserSession();
         });
 
-        $context->registerService('ILogger', function($c) {
-            return $c->query('ServerContainer')->getLogger();
-        });
-
         $context->registerService('LogService', function($c) {
-            $logger = $c->query('ILogger');
+            $logger = $c->query(LoggerInterface::class);
 
             return new LogService($logger, self::APP_ID);
         });

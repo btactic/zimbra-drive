@@ -27,7 +27,7 @@ class ZimbraUsersBackend extends RetroCompatibleBackend
     /** @var AbstractZimbraUsersBackend */
     private $oc_user_zimbra_backend;
 
-    /** @var \OCP\ILogger  */
+    /** @var Psr\Log\LoggerInterface  */
     private $logger;
 
     public function __construct()
