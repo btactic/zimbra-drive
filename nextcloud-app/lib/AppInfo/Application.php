@@ -111,5 +111,3 @@ class Application extends App implements IBootstrap
     }
 
 }
-
-OC::$CLASSPATH['OC_User_Zimbra'] = 'zimbradrive/lib/auth/oc_user_zimbra.php';
