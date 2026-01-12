@@ -175,12 +175,16 @@ Nextcloud administration panel.
 
 **Note** To manually disable the authentication through Zimbra remove these lines to the Nextcloud configuration:
 ```php
-'user_backends' => array (
- 0 => array (
-   'class' => 'OC_User_Zimbra',
-   'arguments' => array(),
- ),
-),
+  'user_backends' =>
+  array (
+    0 =>
+    array (
+      'class' => 'OCA\\ZimbraDrive\\Auth\\ZimbraUsersBackend',
+      'arguments' =>
+      array (
+      ),
+    ),
+  )
 ```
 
 **WARNING:** This process will delete all the Zimbra Users data from Nextcloud and is not reversible.
